@@ -30,6 +30,9 @@ def training(sess, neuralnet, saver, dataset, iteration):
             img_recon = np.squeeze(img_recon, axis=0)
             img_ground = np.squeeze(Y_tr, axis=0)
 
+            img_recon = img_recon / (np.max(img_recon) - np.min(img_recon))
+            img_recon += abs(np.min(img_recon))
+
             plt.clf()
             plt.subplot(121)
             plt.title("Prediction")
