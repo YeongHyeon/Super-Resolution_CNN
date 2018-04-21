@@ -30,6 +30,7 @@ def training(sess, neuralnet, saver, dataset, iteration):
             img_recon = np.squeeze(img_recon, axis=0)
             img_ground = np.squeeze(Y_tr, axis=0)
 
+            plt.clf()
             plt.subplot(121)
             plt.title("Prediction")
             plt.imshow(img_recon)
@@ -37,7 +38,7 @@ def training(sess, neuralnet, saver, dataset, iteration):
             plt.title("Ground-Truth")
             plt.imshow(img_ground)
             plt.savefig("%s/training/%d.png" %(PACK_PATH, it))
-            
+
         print("Iteration [%d / %d] | Loss: %f" %(it, iteration, loss_tr))
 
         saver.save(sess, PACK_PATH+"/Checkpoint/model_checker")
