@@ -14,15 +14,20 @@ class SRNET(object):
         self.outputs = tf.placeholder(tf.float32, [None, None, None, None])
 
         self.channel = 3
-        self.ksize = 3
-        self.n1 = 32
-        self.n2 = 16
+        self.n1 = 64
+        self.n2 = 32
+        self.f1 = 9
+        self.f2 = 1
+        self.f3 = 5
 
         self.weights = {
-            'patch_ext': tf.Variable(tf.random_normal([self.ksize, self.ksize, self.channel, self.n1], stddev=np.sqrt(3))),
-            'nl_map': tf.Variable(tf.random_normal([self.ksize, self.ksize, self.n1, self.n2], stddev=np.sqrt(32))),
-            'recon': tf.Variable(tf.random_normal([self.ksize, self.ksize, self.n2, self.channel], stddev=np.sqrt(16))),
+            'patch_ext': tf.Variable(tf.random_normal([self.f1, self.f1, self.channel, self.n1], stddev=np.sqrt(3))),
+            'nl_map': tf.Variable(tf.random_normal([self.f2, self.f2, self.n1, self.n2], stddev=np.sqrt(32))),
+            'recon': tf.Variable(tf.random_normal([self.f3, self.f3, self.n2, self.channel], stddev=np.sqrt(16))),
         }
+        print("Patch Extraction filter : %s" %(self.weights['patch_ext'].shape))
+        print("Non-linear mapping      : %s" %(self.weights['nl_map'].shape))
+        print("Reconstruction          : %s" %(self.weights['recon'].shape))
 
         self.biases = {
             'patch_ext': tf.Variable(tf.random_normal([self.n1], stddev=np.sqrt(self.channel))),
@@ -34,7 +39,13 @@ class SRNET(object):
         self.nonlinear_map = tf.nn.relu(tf.add(tf.nn.conv2d(self.patch_ext, self.weights['nl_map'], strides=[1, 1, 1, 1], padding='SAME'), self.biases['nl_map']))
         self.recon = tf.add(tf.nn.conv2d(self.nonlinear_map, self.weights['recon'], strides=[1, 1, 1, 1], padding='SAME'), self.biases['recon'])
 
-        self.cost = tf.reduce_sum(tf.square(self.recon - self.outputs))
+        self.loss = tf.reduce_sum(tf.square(self.recon - self.outputs))
 
         self.leaning_rate = 0.001
-        self.optimizer = tf.train.AdamOptimizer(self.leaning_rate).minimize(self.cost)
+        self.optimizer = tf.train.AdamOptimizer(self.leaning_rate).minimize(self.loss)
+
+        # tf.summary.scalar('filter:patch_ext', self.weights['patch_ext'])
+        # tf.summary.scalar('filter:nl_map', self.weights['nl_map'])
+        # tf.summary.scalar('filter:recon', self.weights['recon'])
+        tf.summary.scalar('loss', self.loss)
+        self.summaries = tf.summary.merge_all()
