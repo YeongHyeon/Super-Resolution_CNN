@@ -32,6 +32,7 @@ def training(sess, neuralnet, saver, dataset, iteration):
 
             img_recon = img_recon / (np.max(img_recon) - np.min(img_recon))
             img_recon += abs(np.min(img_recon))
+            img_recon = (img_recon * 255).astype(np.uint8)
 
             plt.clf()
             plt.subplot(121)
