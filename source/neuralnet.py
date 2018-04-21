@@ -39,13 +39,8 @@ class SRNET(object):
         self.nonlinear_map = tf.nn.relu(tf.add(tf.nn.conv2d(self.patch_ext, self.weights['nl_map'], strides=[1, 1, 1, 1], padding='SAME'), self.biases['nl_map']))
         self.recon = tf.add(tf.nn.conv2d(self.nonlinear_map, self.weights['recon'], strides=[1, 1, 1, 1], padding='SAME'), self.biases['recon'])
 
-        self.loss = tf.reduce_sum(tf.square(self.recon - self.outputs))
+        self.loss = tf.sqrt(tf.reduce_sum(tf.square(self.recon - self.outputs)))
+        self.optimizer = tf.train.AdamOptimizer(learning_rate=0.0001).minimize(loss=self.loss)
 
-        self.leaning_rate = 0.001
-        self.optimizer = tf.train.AdamOptimizer(self.leaning_rate).minimize(self.loss)
-
-        # tf.summary.scalar('filter:patch_ext', self.weights['patch_ext'])
-        # tf.summary.scalar('filter:nl_map', self.weights['nl_map'])
-        # tf.summary.scalar('filter:recon', self.weights['recon'])
         tf.summary.scalar('loss', self.loss)
         self.summaries = tf.summary.merge_all()
