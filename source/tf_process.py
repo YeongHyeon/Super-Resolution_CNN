@@ -26,21 +26,32 @@ def training(sess, neuralnet, saver, dataset, iteration):
         train_writer.add_summary(summaries, it)
 
         if(it % 100 == 0):
+            randidx = int(np.random.randint(dataset.amount, size=1))
+            X_tr, Y_tr = dataset.next_batch(idx=randidx)
+
             img_recon = sess.run(neuralnet.recon, feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
+            img_input = np.squeeze(X_tr, axis=0)
             img_recon = np.squeeze(img_recon, axis=0)
             img_ground = np.squeeze(Y_tr, axis=0)
 
-            img_recon = img_recon / (np.max(img_recon) - np.min(img_recon))
-            img_recon += abs(np.min(img_recon))
-            img_recon = (img_recon * 255).astype(np.uint8)
+            img_recon = img_recon / (np.max(img_recon) - np.min(img_recon) + 1e-4)
+            if(np.min(img_recon) < 0):
+                img_recon += abs(np.min(img_recon))
+            elif(np.min(img_recon) >= 1):
+                img_recon -= np.min(img_recon)
+            # img_recon = (img_recon * 255).astype(np.uint8)
 
             plt.clf()
-            plt.subplot(121)
-            plt.title("Prediction")
+            plt.subplot(131)
+            plt.title("Low-Resolution")
+            plt.imshow(img_input)
+            plt.subplot(132)
+            plt.title("Reconstruction")
             plt.imshow(img_recon)
-            plt.subplot(122)
-            plt.title("Ground-Truth")
+            plt.subplot(133)
+            plt.title("High-Resolution")
             plt.imshow(img_ground)
+            plt.tight_layout(pad=1, w_pad=1, h_pad=1)
             plt.savefig("%s/training/%d.png" %(PACK_PATH, it))
 
         print("Iteration [%d / %d] | Loss: %f" %(it, iteration, loss_tr))

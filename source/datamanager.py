@@ -18,20 +18,33 @@ class DataSet(object):
         self.amount = len(self.list_input)
         self.data_idx = 0
 
-    def next_batch(self):
+    def next_batch(self, idx=-1):
 
-        input = np.expand_dims(np.load(self.list_input[self.data_idx]), axis=0)
-        ground = np.expand_dims(np.load(self.list_ground[self.data_idx]), axis=0)
+        if(idx == -1):
+            input = np.expand_dims(np.load(self.list_input[self.data_idx]), axis=0)
+            ground = np.expand_dims(np.load(self.list_ground[self.data_idx]), axis=0)
 
-        # If the image is gray scale convert it rgb like style.
-        if(len(input.shape) < 4):
-            tmp_input = np.expand_dims(input, axis=3)
-            tmp_input2 = np.append(tmp_input, tmp_input, axis=3)
-            input = np.append(tmp_input2, tmp_input, axis=3)
-            tmp_ground = np.expand_dims(ground, axis=3)
-            tmp_ground2 = np.append(tmp_ground, tmp_ground, axis=3)
-            ground = np.append(tmp_ground2, tmp_ground, axis=3)
+            # If the image is gray scale convert it rgb like style.
+            if(len(input.shape) < 4):
+                tmp_input = np.expand_dims(input, axis=3)
+                tmp_input2 = np.append(tmp_input, tmp_input, axis=3)
+                input = np.append(tmp_input2, tmp_input, axis=3)
+                tmp_ground = np.expand_dims(ground, axis=3)
+                tmp_ground2 = np.append(tmp_ground, tmp_ground, axis=3)
+                ground = np.append(tmp_ground2, tmp_ground, axis=3)
 
-        self.data_idx = (self.data_idx + 1) % self.amount
+            self.data_idx = (self.data_idx + 1) % self.amount
+        else:
+            input = np.expand_dims(np.load(self.list_input[idx]), axis=0)
+            ground = np.expand_dims(np.load(self.list_ground[idx]), axis=0)
+
+            # If the image is gray scale convert it rgb like style.
+            if(len(input.shape) < 4):
+                tmp_input = np.expand_dims(input, axis=3)
+                tmp_input2 = np.append(tmp_input, tmp_input, axis=3)
+                input = np.append(tmp_input2, tmp_input, axis=3)
+                tmp_ground = np.expand_dims(ground, axis=3)
+                tmp_ground2 = np.append(tmp_ground, tmp_ground, axis=3)
+                ground = np.append(tmp_ground2, tmp_ground, axis=3)
 
         return input, ground
