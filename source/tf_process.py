@@ -26,6 +26,8 @@ def training(sess, neuralnet, saver, dataset, iteration):
         train_writer.add_summary(summaries, it)
 
         if(it % 100 == 0):
+            np.save("loss", np.asarray(list_loss))
+
             randidx = int(np.random.randint(dataset.amount, size=1))
             X_tr, Y_tr = dataset.next_batch(idx=randidx)
 
@@ -33,14 +35,6 @@ def training(sess, neuralnet, saver, dataset, iteration):
             img_input = np.squeeze(X_tr, axis=0)
             img_recon = np.squeeze(img_recon, axis=0)
             img_ground = np.squeeze(Y_tr, axis=0)
-
-            print(np.max(img_recon), np.min(img_recon), np.mean(img_recon))
-            # img_recon = img_recon / (np.max(img_recon) - np.min(img_recon) + 1e-4)
-            # if(np.min(img_recon) < 0):
-            #     img_recon += abs(np.min(img_recon))
-            # elif(np.min(img_recon) >= 1):
-            #     img_recon -= np.min(img_recon)
-            # img_recon = (img_recon * 255).astype(np.uint8)
 
             plt.clf()
             plt.subplot(131)

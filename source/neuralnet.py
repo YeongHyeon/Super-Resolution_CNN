@@ -43,7 +43,7 @@ class SRNET(object):
         self.recon = tf.clip_by_value(self.recon_tmp, clip_value_min=0.0, clip_value_max=1.0)
 
         self.loss = tf.sqrt(tf.reduce_sum(tf.square(self.recon - self.outputs)))
-        self.optimizer = tf.train.AdamOptimizer(learning_rate=1e-5).minimize(loss=self.loss)
+        self.optimizer = tf.train.GradientDescentOptimizer(learning_rate=1e-5).minimize(loss=self.loss)
 
         tf.summary.histogram('w-patch_ext', self.weights['patch_ext'])
         tf.summary.histogram('w-nl_map', self.weights['nl_map'])
