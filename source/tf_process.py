@@ -34,11 +34,12 @@ def training(sess, neuralnet, saver, dataset, iteration):
             img_recon = np.squeeze(img_recon, axis=0)
             img_ground = np.squeeze(Y_tr, axis=0)
 
-            img_recon = img_recon / (np.max(img_recon) - np.min(img_recon) + 1e-4)
-            if(np.min(img_recon) < 0):
-                img_recon += abs(np.min(img_recon))
-            elif(np.min(img_recon) >= 1):
-                img_recon -= np.min(img_recon)
+            print(np.max(img_recon), np.min(img_recon), np.mean(img_recon))
+            # img_recon = img_recon / (np.max(img_recon) - np.min(img_recon) + 1e-4)
+            # if(np.min(img_recon) < 0):
+            #     img_recon += abs(np.min(img_recon))
+            # elif(np.min(img_recon) >= 1):
+            #     img_recon -= np.min(img_recon)
             # img_recon = (img_recon * 255).astype(np.uint8)
 
             plt.clf()
