@@ -16,6 +16,8 @@ try: os.mkdir("./dataset/ground_truth")
 except: print("\'./dataset/ground_truth\'is Already Exist.")
 
 for idx, _ in enumerate(list_output):
+    # bisample = scipy.misc.imread(list_input[idx])
+    # gtsample = scipy.misc.imread(list_output[idx])
     bisample = scipy.misc.imread(list_input[idx]).astype(np.float32) / 255
     gtsample = scipy.misc.imread(list_output[idx]).astype(np.float32) / 255
     biname = list_input[idx].split('/')[-1].split('.')[0]

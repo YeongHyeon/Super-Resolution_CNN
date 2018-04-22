@@ -52,8 +52,10 @@ class SRNET(object):
         tf.summary.histogram('b-recon', self.biases['recon'])
 
         tf.summary.image('img-inputs', self.inputs)
-        tf.summary.image('img-patch_ext', tf.expand_dims(tf.reduce_mean(self.patch_ext, 3), 3))
-        tf.summary.image('img-nonlinear_map', tf.expand_dims(tf.reduce_mean(self.nonlinear_map, 3), 3))
+        for c_idx in range(self.n1):
+            tf.summary.image('img-patch_ext %d' %(c_idx), tf.expand_dims(self.patch_ext[:,:,:,c_idx], 3))
+        for c_idx in range(self.n2):
+            tf.summary.image('img-nonlinear_map %d' %(c_idx), tf.expand_dims(self.nonlinear_map[:,:,:,c_idx], 3))
         tf.summary.image('img-recon', self.recon)
         tf.summary.image('img-outputs', self.outputs)
 
