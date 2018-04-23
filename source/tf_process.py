@@ -1,5 +1,7 @@
 import os, inspect, time
 
+import scipy.misc
+
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,6 +16,15 @@ def training(sess, neuralnet, saver, dataset, iteration):
 
     try: os.mkdir(PACK_PATH+"/training")
     except: pass
+    try: os.mkdir(PACK_PATH+"/static")
+    except: pass
+    try: os.mkdir(PACK_PATH+"/static/bicubic")
+    except: pass
+    try: os.mkdir(PACK_PATH+"/static/reconstruction")
+    except: pass
+    try: os.mkdir(PACK_PATH+"/static/high-resolution")
+    except: pass
+
 
     print("\nTraining SRCNN to %d iterations" %(iteration))
     train_writer = tf.summary.FileWriter(PACK_PATH+'/logs')
@@ -23,7 +34,7 @@ def training(sess, neuralnet, saver, dataset, iteration):
         summaries, _ = sess.run([neuralnet.summaries, neuralnet.optimizer], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
         loss_tr = sess.run(neuralnet.loss, feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
         list_loss.append(loss_tr)
-        train_writer.add_summary(summaries, it)
+        # train_writer.add_summary(summaries, it)
 
         if(it % 100 == 0):
             np.save("loss", np.asarray(list_loss))
@@ -48,6 +59,16 @@ def training(sess, neuralnet, saver, dataset, iteration):
             plt.imshow(img_ground)
             plt.tight_layout(pad=1, w_pad=1, h_pad=1)
             plt.savefig("%s/training/%d.png" %(PACK_PATH, it))
+
+            """static img"""
+            X_tr, Y_tr = dataset.next_batch(idx=int(11))
+            img_recon = sess.run(neuralnet.recon, feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
+            img_input = np.squeeze(X_tr, axis=0)
+            img_recon = np.squeeze(img_recon, axis=0)
+            img_ground = np.squeeze(Y_tr, axis=0)
+            scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
+            scipy.misc.imsave("%s/static/reconstruction/%d.png" %(PACK_PATH, it), img_recon)
+            scipy.misc.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
 
         print("Iteration [%d / %d] | Loss: %f" %(it, iteration, loss_tr))
 
