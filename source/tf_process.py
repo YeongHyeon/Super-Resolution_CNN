@@ -63,12 +63,14 @@ def training(sess, neuralnet, saver, dataset, iteration):
             """static img"""
             X_tr, Y_tr = dataset.next_batch(idx=int(11))
             img_recon = sess.run(neuralnet.recon, feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
-            img_input = np.squeeze(X_tr, axis=0)
             img_recon = np.squeeze(img_recon, axis=0)
-            img_ground = np.squeeze(Y_tr, axis=0)
-            scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
             scipy.misc.imsave("%s/static/reconstruction/%d.png" %(PACK_PATH, it), img_recon)
-            scipy.misc.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
+
+            if(it == 0):
+                img_input = np.squeeze(X_tr, axis=0)
+                img_ground = np.squeeze(Y_tr, axis=0)
+                scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
+                scipy.misc.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
 
         print("Iteration [%d / %d] | Loss: %f" %(it, iteration, loss_tr))
 
