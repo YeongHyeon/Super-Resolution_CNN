@@ -5,8 +5,8 @@ import tensorflow as tf
 import source.neuralnet as nn
 import source.datamanager as dman
 import source.tf_process as tfp
-import source.developer as developer
-developer.print_stamp()
+import source.stamper as stamper
+stamper.print_stamp()
 
 def main():
 
