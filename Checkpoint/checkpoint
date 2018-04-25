@@ -1,0 +1,2 @@
+model_checkpoint_path: "/media/yeonghyeon/HDD2/SRnet/SRNET/source/../Checkpoint/model_checker"
+all_model_checkpoint_paths: "/media/yeonghyeon/HDD2/SRnet/SRNET/source/../Checkpoint/model_checker"
