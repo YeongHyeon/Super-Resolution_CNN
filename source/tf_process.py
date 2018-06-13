@@ -18,6 +18,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     loss_tr = 0
     list_loss = []
     list_psnr = []
+    list_psnr_te = []
 
     makedir(PACK_PATH+"/training")
     makedir(PACK_PATH+"/static")
@@ -66,6 +67,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             """static img(test)"""
             X_tr, Y_tr = dataset.next_batch(idx=int(0))
             img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
+            list_psnr_te.append(tmp_psnr)
             img_recon = np.squeeze(img_recon, axis=0)
             scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%d.png" %(PACK_PATH, it, int(tmp_psnr)), img_recon)
 
@@ -88,8 +90,8 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     plt.clf()
     plt.rcParams['font.size'] = 15
     plt.plot(list_loss, color='blue', linestyle="-", label="loss")
-    plt.ylabel("loss")
-    plt.xlabel("iteration")
+    plt.ylabel("L2 loss")
+    plt.xlabel("Iteration")
     plt.tight_layout(pad=1, w_pad=1, h_pad=1)
     plt.savefig("loss.png")
     plt.close()
@@ -98,10 +100,20 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     plt.clf()
     plt.rcParams['font.size'] = 15
     plt.plot(list_psnr, color='blue', linestyle="-", label="loss")
-    plt.ylabel("loss")
-    plt.xlabel("iteration")
+    plt.ylabel("PSNR (db)")
+    plt.xlabel("Iteration")
     plt.tight_layout(pad=1, w_pad=1, h_pad=1)
     plt.savefig("psnr.png")
+    plt.close()
+
+    np.save("psnr_te_static", np.asarray(list_psnr_te))
+    plt.clf()
+    plt.rcParams['font.size'] = 15
+    plt.plot(list_psnr_te, color='blue', linestyle="-", label="loss")
+    plt.ylabel("PSNR (db)")
+    plt.xlabel("Iteration")
+    plt.tight_layout(pad=1, w_pad=1, h_pad=1)
+    plt.savefig("psnr_te_static.png")
     plt.close()
 
 def validation(sess, neuralnet, saver, dataset):
