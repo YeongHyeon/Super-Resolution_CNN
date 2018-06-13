@@ -28,7 +28,7 @@ class DataSet(object):
         ground_batch = np.zeros((0, 1, 1, 1))
 
         if(train):
-            if(idx != 1):
+            if(idx != -1):
                 input = np.expand_dims(np.load(self.list_train_lr[idx]), axis=0)
                 ground = np.expand_dims(np.load(self.list_train_hr[idx]), axis=0)
 
@@ -48,6 +48,7 @@ class DataSet(object):
                 input_batch = np.append(input_batch, input, axis=0)
                 ground_batch = np.append(ground_batch, ground, axis=0)
             else:
+                idx_bank = self.data_idx
                 while(True):
                     input = np.expand_dims(np.load(self.list_train_lr[self.data_idx]), axis=0)
                     ground = np.expand_dims(np.load(self.list_train_hr[self.data_idx]), axis=0)
@@ -65,12 +66,14 @@ class DataSet(object):
                         input_batch = np.zeros((0, input.shape[1], input.shape[2], input.shape[3]))
                         ground_batch = np.zeros((0, ground.shape[1], ground.shape[2], ground.shape[3]))
 
-                    input_batch = np.append(input_batch, input, axis=0)
-                    ground_batch = np.append(ground_batch, ground, axis=0)
+                    if((input_batch.shape[1] == input.shape[1]) and (input_batch.shape[2] == input.shape[2]) and (input_batch.shape[3] == input.shape[3])):
+                        input_batch = np.append(input_batch, input, axis=0)
+                        ground_batch = np.append(ground_batch, ground, axis=0)
 
                     if(input_batch.shape[0] >= batch_size): break
 
                     self.data_idx = (self.data_idx + 1) % self.amount_tr
+                self.data_idx = (idx_bank + 1) % self.amount_tr
         else:
             input = np.expand_dims(np.load(self.list_test_lr[idx]), axis=0)
             ground = np.expand_dims(np.load(self.list_test_hr[idx]), axis=0)

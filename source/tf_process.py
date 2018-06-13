@@ -29,7 +29,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     train_writer = tf.summary.FileWriter(PACK_PATH+'/logs')
     for it in range(iteration):
 
-        X_tr, Y_tr = dataset.next_batch()
+        X_tr, Y_tr = dataset.next_batch(batch_size=batch_size, train=True)
         summaries, _ = sess.run([neuralnet.summaries, neuralnet.optimizer], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
         loss_tr, psnr_tr = sess.run([neuralnet.loss, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
         list_loss.append(loss_tr)
@@ -64,7 +64,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             plt.close()
 
             """static img(test)"""
-            X_tr, Y_tr = dataset.next_batch(batch_size=batch_size, idx=int(0))
+            X_tr, Y_tr = dataset.next_batch(idx=int(0))
             img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
             img_recon = np.squeeze(img_recon, axis=0)
             scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%d.png" %(PACK_PATH, it, int(tmp_psnr)), img_recon)
