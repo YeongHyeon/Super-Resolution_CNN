@@ -42,7 +42,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             randidx = int(np.random.randint(dataset.amount_tr, size=1))
             X_tr, Y_tr = dataset.next_batch(idx=randidx, train=True)
 
-            img_recon = sess.run(neuralnet.recon, feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
+            img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
             img_input = np.squeeze(X_tr, axis=0)
             img_recon = np.squeeze(img_recon, axis=0)
             img_ground = np.squeeze(Y_tr, axis=0)
@@ -60,7 +60,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             plt.title("High-Resolution")
             plt.imshow(img_ground, cmap='gray')
             plt.tight_layout(pad=1, w_pad=1, h_pad=1)
-            plt.savefig("%s/training/%d.png" %(PACK_PATH, it))
+            plt.savefig("%s/training/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr))
             plt.close()
 
             """static img(test)"""
