@@ -121,12 +121,12 @@ def validation(sess, neuralnet, saver, dataset):
         X_te, Y_te = dataset.next_batch(idx=int(tidx))
         img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_te, neuralnet.outputs:Y_te})
         img_recon = np.squeeze(img_recon, axis=0)
-        scipy.misc.imsave("%s/test/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr), img_recon)
+        scipy.misc.imsave("%s/test/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, tidx, tmp_psnr), img_recon)
 
         img_input = np.squeeze(X_te, axis=0)
         img_ground = np.squeeze(Y_te, axis=0)
-        scipy.misc.imsave("%s/test/bicubic/%d.png" %(PACK_PATH, it), img_input)
-        scipy.misc.imsave("%s/test/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
+        scipy.misc.imsave("%s/test/bicubic/%d.png" %(PACK_PATH, tidx), img_input)
+        scipy.misc.imsave("%s/test/high-resolution/%d.png" %(PACK_PATH, tidx), img_ground)
 
     elapsed_time = time.time() - start_time
     print("Elapsed: "+str(elapsed_time))
