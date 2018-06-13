@@ -60,14 +60,14 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             plt.title("High-Resolution")
             plt.imshow(img_ground, cmap='gray')
             plt.tight_layout(pad=1, w_pad=1, h_pad=1)
-            plt.savefig("%s/training/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr))
+            plt.savefig("%s/training/%d_psnr_%d.png" %(PACK_PATH, it, int(tmp_psnr)))
             plt.close()
 
             """static img(test)"""
             X_tr, Y_tr = dataset.next_batch(batch_size=batch_size, idx=int(0))
             img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
             img_recon = np.squeeze(img_recon, axis=0)
-            scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr), img_recon)
+            scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%d.png" %(PACK_PATH, it, int(tmp_psnr)), img_recon)
 
             if(it % 100 == 0):
                 img_input = np.squeeze(X_tr, axis=0)
@@ -121,7 +121,7 @@ def validation(sess, neuralnet, saver, dataset):
         X_te, Y_te = dataset.next_batch(idx=int(tidx))
         img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_te, neuralnet.outputs:Y_te})
         img_recon = np.squeeze(img_recon, axis=0)
-        scipy.misc.imsave("%s/test/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, tidx, tmp_psnr), img_recon)
+        scipy.misc.imsave("%s/test/reconstruction/%d_psnr_%d.png" %(PACK_PATH, tidx, int(tmp_psnr)), img_recon)
 
         img_input = np.squeeze(X_te, axis=0)
         img_ground = np.squeeze(Y_te, axis=0)
