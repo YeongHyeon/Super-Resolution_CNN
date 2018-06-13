@@ -13,6 +13,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     start_time = time.time()
     loss_tr = 0
     list_loss = []
+    list_psnr = []
 
     try: os.mkdir(PACK_PATH+"/training")
     except: pass
@@ -34,7 +35,8 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
         summaries, _ = sess.run([neuralnet.summaries, neuralnet.optimizer], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
         loss_tr, psnr_tr = sess.run([neuralnet.loss, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
         list_loss.append(loss_tr)
-        # train_writer.add_summary(summaries, it)
+        list_psnr.append(psnr_tr)
+        train_writer.add_summary(summaries, it)
 
         if(it % 100 == 0):
             np.save("loss", np.asarray(list_loss))
@@ -75,27 +77,34 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
                 scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
                 scipy.misc.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
 
-        print("Iteration [%d / %d] | Loss: %f" %(it, iteration, loss_tr))
+        print("Iteration [%d / %d] | Loss: %f  PSNR: %f" %(it, iteration, loss_tr, psnr_tr))
 
         saver.save(sess, PACK_PATH+"/Checkpoint/model_checker")
 
-    print("Final iteration | Loss: %f" %(loss_tr))
+    print("Final iteration | Loss: %f  PSNR: %f" %(loss_tr, psnr_tr))
 
     elapsed_time = time.time() - start_time
     print("Elapsed: "+str(elapsed_time))
 
-    list_loss = np.asarray(list_loss)
-    np.save("loss", list_loss)
-
+    np.save("loss", np.asarray(list_loss))
     plt.clf()
     plt.rcParams['font.size'] = 15
     plt.plot(list_loss, color='blue', linestyle="-", label="loss")
-    # plt.plot(np.log(list_loss), color='tomato', linestyle="--", label="log scale loss")
     plt.ylabel("loss")
     plt.xlabel("iteration")
-    # plt.legend(loc='best')
     plt.tight_layout(pad=1, w_pad=1, h_pad=1)
     plt.savefig("loss.png")
+    plt.close()
+
+    np.save("psnr", np.asarray(list_psnr))
+    plt.clf()
+    plt.rcParams['font.size'] = 15
+    plt.plot(list_psnr, color='blue', linestyle="-", label="loss")
+    plt.ylabel("loss")
+    plt.xlabel("iteration")
+    plt.tight_layout(pad=1, w_pad=1, h_pad=1)
+    plt.savefig("psnr.png")
+    plt.close()
 
 def validation(sess, neuralnet, saver, dataset):
 
