@@ -24,7 +24,7 @@ def main():
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--iter', type=int, default=100000, help='-')
+    parser.add_argument('--iter', type=int, default=500000, help='-')
     parser.add_argument('--batch', type=int, default=9, help='-')
 
     FLAGS, unparsed = parser.parse_known_args()

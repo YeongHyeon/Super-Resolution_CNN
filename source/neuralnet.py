@@ -54,13 +54,13 @@ class SRNET(object):
         tf.summary.histogram('b-nl_map', self.biases['nl_map'])
         tf.summary.histogram('b-recon', self.biases['recon'])
 
-        tf.summary.image('img-inputs', self.inputs)
-        for c_idx in range(self.n1):
-            tf.summary.image('img-patch_ext %d' %(c_idx), tf.expand_dims(self.patch_ext[:,:,:,c_idx], 3))
-        for c_idx in range(self.n2):
-            tf.summary.image('img-nonlinear_map %d' %(c_idx), tf.expand_dims(self.nonlinear_map[:,:,:,c_idx], 3))
-        tf.summary.image('img-recon', self.recon)
-        tf.summary.image('img-outputs', self.outputs)
+        # tf.summary.image('img-inputs', self.inputs)
+        # for c_idx in range(self.n1):
+        #     tf.summary.image('img-patch_ext %d' %(c_idx), tf.expand_dims(self.patch_ext[:,:,:,c_idx], 3))
+        # for c_idx in range(self.n2):
+        #     tf.summary.image('img-nonlinear_map %d' %(c_idx), tf.expand_dims(self.nonlinear_map[:,:,:,c_idx], 3))
+        # tf.summary.image('img-recon', self.recon)
+        # tf.summary.image('img-outputs', self.outputs)
 
         tf.summary.scalar('loss', self.loss)
         tf.summary.scalar('psnr', self.psnr)
