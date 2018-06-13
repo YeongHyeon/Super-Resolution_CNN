@@ -43,7 +43,8 @@ class SRNET(object):
         self.recon = tf.clip_by_value(self.recon_tmp, clip_value_min=0.0, clip_value_max=1.0)
 
         self.loss = tf.sqrt(tf.reduce_sum(tf.square(self.recon - self.outputs)))
-        self.psnr = tf.log(1 / tf.sqrt(tf.reduce_sum(tf.square(self.recon - self.outputs)))) / tf.log(10.0) * 20
+        self.psnr = tf.log(1 / tf.sqrt(tf.reduce_mean(tf.square(self.recon - self.outputs)))) / tf.log(10.0) * 20
+
         self.optimizer = tf.train.GradientDescentOptimizer(learning_rate=1e-5).minimize(loss=self.loss)
 
         tf.summary.histogram('w-patch_ext', self.weights['patch_ext'])

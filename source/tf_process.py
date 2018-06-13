@@ -69,7 +69,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             img_recon = np.squeeze(img_recon, axis=0)
             scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr), img_recon)
 
-            if(it == 0):
+            if(it % 100 == 0):
                 img_input = np.squeeze(X_tr, axis=0)
                 img_ground = np.squeeze(Y_tr, axis=0)
                 scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
