@@ -8,6 +8,10 @@ import matplotlib.pyplot as plt
 
 PACK_PATH = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))+"/.."
 
+def makedir(path):
+    try: os.mkdir(path)
+    except: pass
+
 def training(sess, neuralnet, saver, dataset, iteration, batch_size):
 
     start_time = time.time()
@@ -15,17 +19,11 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     list_loss = []
     list_psnr = []
 
-    try: os.mkdir(PACK_PATH+"/training")
-    except: pass
-    try: os.mkdir(PACK_PATH+"/static")
-    except: pass
-    try: os.mkdir(PACK_PATH+"/static/bicubic")
-    except: pass
-    try: os.mkdir(PACK_PATH+"/static/reconstruction")
-    except: pass
-    try: os.mkdir(PACK_PATH+"/static/high-resolution")
-    except: pass
-
+    makedir(PACK_PATH+"/training")
+    makedir(PACK_PATH+"/static")
+    makedir(PACK_PATH+"/static/bicubic")
+    makedir(PACK_PATH+"/static/reconstruction")
+    makedir(PACK_PATH+"/static/high-resolution")
 
     print("\nTraining SRCNN to %d iterations" %(iteration))
     train_writer = tf.summary.FileWriter(PACK_PATH+'/logs')
@@ -111,6 +109,11 @@ def validation(sess, neuralnet, saver, dataset):
     if(os.path.exists(PACK_PATH+"/Checkpoint/model_checker.index")):
         saver.restore(sess, PACK_PATH+"/Checkpoint/model_checker")
 
+    makedir(PACK_PATH+"/test")
+    makedir(PACK_PATH+"/test/bicubic")
+    makedir(PACK_PATH+"/test/reconstruction")
+    makedir(PACK_PATH+"/test/high-resolution")
+
     start_time = time.time()
     print("\nValidation")
     for tidx in range(dataset.amount_te):
@@ -118,12 +121,12 @@ def validation(sess, neuralnet, saver, dataset):
         X_te, Y_te = dataset.next_batch(idx=int(tidx))
         img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_te, neuralnet.outputs:Y_te})
         img_recon = np.squeeze(img_recon, axis=0)
-        scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr), img_recon)
+        scipy.misc.imsave("%s/test/reconstruction/%d_psnr_%.3f.png" %(PACK_PATH, it, tmp_psnr), img_recon)
 
         img_input = np.squeeze(X_te, axis=0)
         img_ground = np.squeeze(Y_te, axis=0)
-        scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
-        scipy.misc.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
+        scipy.misc.imsave("%s/test/bicubic/%d.png" %(PACK_PATH, it), img_input)
+        scipy.misc.imsave("%s/test/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
 
     elapsed_time = time.time() - start_time
     print("Elapsed: "+str(elapsed_time))
