@@ -1,7 +1,5 @@
 import os, inspect, time
 
-import scipy.misc
-
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -69,13 +67,13 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
             img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_tr, neuralnet.outputs:Y_tr})
             list_psnr_te.append(tmp_psnr)
             img_recon = np.squeeze(img_recon, axis=0)
-            scipy.misc.imsave("%s/static/reconstruction/%d_psnr_%d.png" %(PACK_PATH, it, int(tmp_psnr)), img_recon)
+            plt.imsave("%s/static/reconstruction/%d_psnr_%d.png" %(PACK_PATH, it, int(tmp_psnr)), img_recon)
 
             if(it % 100 == 0):
                 img_input = np.squeeze(X_tr, axis=0)
                 img_ground = np.squeeze(Y_tr, axis=0)
-                scipy.misc.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
-                scipy.misc.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
+                plt.imsave("%s/static/bicubic/%d.png" %(PACK_PATH, it), img_input)
+                plt.imsave("%s/static/high-resolution/%d.png" %(PACK_PATH, it), img_ground)
 
         print("Iteration [%d / %d] | Loss: %f  PSNR: %f" %(it, iteration, loss_tr, psnr_tr))
 
@@ -133,12 +131,12 @@ def validation(sess, neuralnet, saver, dataset):
         X_te, Y_te = dataset.next_batch(idx=int(tidx))
         img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_te, neuralnet.outputs:Y_te})
         img_recon = np.squeeze(img_recon, axis=0)
-        scipy.misc.imsave("%s/test/reconstruction/%d_psnr_%d.png" %(PACK_PATH, tidx, int(tmp_psnr)), img_recon)
+        plt.imsave("%s/test/reconstruction/%d_psnr_%d.png" %(PACK_PATH, tidx, int(tmp_psnr)), img_recon)
 
         img_input = np.squeeze(X_te, axis=0)
         img_ground = np.squeeze(Y_te, axis=0)
-        scipy.misc.imsave("%s/test/bicubic/%d.png" %(PACK_PATH, tidx), img_input)
-        scipy.misc.imsave("%s/test/high-resolution/%d.png" %(PACK_PATH, tidx), img_ground)
+        plt.imsave("%s/test/bicubic/%d.png" %(PACK_PATH, tidx), img_input)
+        plt.imsave("%s/test/high-resolution/%d.png" %(PACK_PATH, tidx), img_ground)
 
     elapsed_time = time.time() - start_time
     print("Elapsed: "+str(elapsed_time))
