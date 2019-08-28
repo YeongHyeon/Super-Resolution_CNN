@@ -102,9 +102,7 @@ def validation(sess, neuralnet, saver, dataset):
         saver.restore(sess, PACK_PATH+"/Checkpoint/model_checker")
 
     makedir(PACK_PATH+"/test")
-    makedir(PACK_PATH+"/test/bicubic")
     makedir(PACK_PATH+"/test/reconstruction")
-    makedir(PACK_PATH+"/test/")
 
     start_time = time.time()
     print("\nValidation")
