@@ -32,3 +32,4 @@ The architecture constructed by three convolutional layers, and the kernel size 
 [2] Urban 100 dataset, Huang et al.,  https://sites.google.com/site/jbhuang0604/publications/struct_sr  
 
 First commit: 21.April.2018  
+Version Update: 28.August.2019  
