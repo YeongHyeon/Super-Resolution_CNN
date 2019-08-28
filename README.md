@@ -20,6 +20,12 @@ Figure 2. Reconstructed image in each iteration.
 Figure 3. Comparison between the input (Bicubic Interpolated), reconstructed image (by SRCNN) and output (High-Resolution) image.  
 <br>  
 
+## Requirements
+* Python 3.6.8  
+* Tensorflow 1.14.0  
+* Numpy 1.14.0  
+* Matplotlib 3.1.1  
+
 Reference
 -----
 [1] Image Super-Resolution Using Deep Convolutional Networks, Chao Dong et al., https://ieeexplore.ieee.org/abstract/document/7115171/  
