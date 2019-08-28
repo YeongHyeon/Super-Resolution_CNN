@@ -14,9 +14,9 @@ def main():
 
     dataset = dman.DataSet()
 
-    sess = tf.InteractiveSession()
-    sess.run(tf.global_variables_initializer())
-    saver = tf.train.Saver()
+    sess = tf.compat.v1.InteractiveSession()
+    sess.run(tf.compat.v1.global_variables_initializer())
+    saver = tf.compat.v1.train.Saver()
 
     tfp.training(sess=sess, neuralnet=srnet, saver=saver, dataset=dataset, iteration=int(FLAGS.iter), batch_size=FLAGS.batch)
     tfp.validation(sess=sess, neuralnet=srnet, saver=saver, dataset=dataset)

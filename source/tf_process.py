@@ -25,7 +25,7 @@ def training(sess, neuralnet, saver, dataset, iteration, batch_size):
     makedir(PACK_PATH+"/static/high-resolution")
 
     print("\nTraining SRCNN to %d iterations" %(iteration))
-    train_writer = tf.summary.FileWriter(PACK_PATH+'/logs')
+    train_writer = tf.compat.v1.summary.FileWriter(PACK_PATH+'/Checkpoint')
     for it in range(iteration):
 
         X_tr, Y_tr = dataset.next_batch(batch_size=batch_size, train=True)
