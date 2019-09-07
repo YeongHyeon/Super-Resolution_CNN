@@ -13,7 +13,7 @@ The architecture constructed by three convolutional layers, and the kernel size 
 ## Results
 <div align="center">
   <img src="./readme/1000.png" width="250"><img src="./readme/10000.png" width="250"><img src="./readme/100000.png" width="250">  
-  <p>Reconstructed image in each iteration.</p>
+  <p>Reconstructed image in each iteration. 1k, 10k, 100k iterations.</p>
 </div>
 
 <div align="center">
