@@ -12,13 +12,13 @@ The architecture constructed by three convolutional layers, and the kernel size 
 
 ## Results
 <div align="center">
-  <img src="./readme/iteration.png" width="700">  
+  <img src="./readme/1000.png" width="250"><img src="./readme/10000.png" width="250"><img src="./readme/100000.png" width="250">  
   <p>Reconstructed image in each iteration.</p>
 </div>
 
 <div align="center">
-  <img src="./readme/comparison.png" width="700">  
-  <p>Comparison between the input (Bicubic Interpolated), reconstructed image (by SRCNN) and output (High-Resolution) image.</p>
+  <img src="./readme/lr.png" width="250"><img src="./readme/100000.png" width="250"><img src="./readme/hr.png" width="250">    
+  <p>Comparison between the input (Bicubic Interpolated), reconstructed image (by SRCNN), and target (High-Resolution) image.</p>
 </div>
 
 ## Requirements
