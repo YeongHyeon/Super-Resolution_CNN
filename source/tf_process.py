@@ -75,14 +75,14 @@ def training(sess, neuralnet, saver, dataset, epochs, batch_size):
         plt.title("High-Resolution")
         plt.imshow(img_ground)
         plt.tight_layout(pad=1, w_pad=1, h_pad=1)
-        plt.savefig("%s/training/%d_psnr_%d.png" %(PACK_PATH, epoch, int(tmp_psnr)))
+        plt.savefig("%s/training/%09d_psnr_%d.png" %(PACK_PATH, epoch, int(tmp_psnr)))
         plt.close()
 
         """static img(test)"""
         img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_static, neuralnet.outputs:Y_static})
         list_psnr_static.append(tmp_psnr)
         img_recon = np.squeeze(img_recon, axis=0)
-        plt.imsave("%s/static/reconstruction/%d_psnr_%d.png" %(PACK_PATH, epoch, int(tmp_psnr)), img_recon)
+        plt.imsave("%s/static/reconstruction/%09d_psnr_%d.png" %(PACK_PATH, epoch, int(tmp_psnr)), img_recon)
 
         print("Epoch [%d / %d] | Loss: %f  PSNR: %f" %(epoch, epochs, loss_tr, psnr_tr))
         saver.save(sess, PACK_PATH+"/Checkpoint/model_checker")
@@ -113,7 +113,7 @@ def validation(sess, neuralnet, saver, dataset):
 
         img_recon, tmp_psnr = sess.run([neuralnet.recon, neuralnet.psnr], feed_dict={neuralnet.inputs:X_te, neuralnet.outputs:Y_te})
         img_recon = np.squeeze(img_recon, axis=0)
-        plt.imsave("%s/test/reconstruction/%d_psnr_%d.png" %(PACK_PATH, tidx, int(tmp_psnr)), img_recon)
+        plt.imsave("%s/test/reconstruction/%09d_psnr_%d.png" %(PACK_PATH, tidx, int(tmp_psnr)), img_recon)
 
         img_input = np.squeeze(X_te, axis=0)
         img_ground = np.squeeze(Y_te, axis=0)
